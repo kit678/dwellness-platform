@@ -1,7 +1,7 @@
 import { getServerSession, type NextAuthOptions } from "next-auth";
 import GitHubProvider from "next-auth/providers/github";
 import db from "./db"; // Use the Knex instance
-import { accounts, sessions, users, verificationTokens } from "./schema";
+import { users } from "./schema"; // Importing users table
 
 const VERCEL_DEPLOYMENT = !!process.env.VERCEL_URL;
 export const authOptions: NextAuthOptions = {
@@ -71,31 +71,6 @@ export function getSession() {
       image: string;
     };
   } | null>;
-}
-
-export function withSiteAuth(action: any) {
-  return async (
-    formData: FormData | null,
-    siteId: string,
-    key: string | null,
-  ) => {
-    const session = await getSession();
-    if (!session) {
-      return {
-        error: "Not authenticated",
-      };
-    }
-
-    const site = await db('sites').where('id', siteId).first();
-
-    if (!site || site.userId !== session.user.id) {
-      return {
-        error: "Not authorized",
-      };
-    }
-
-    return action(formData, site, key);
-  };
 }
 
 export function withPostAuth(action: any) {
