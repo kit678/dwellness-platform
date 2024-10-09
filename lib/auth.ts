@@ -1,11 +1,12 @@
 import { getServerSession, type NextAuthOptions } from "next-auth";
 import GitHubProvider from "next-auth/providers/github";
-import db from "./db.mjs"; // Use the Drizzle ORM instance
-import { users } from "./schema"; // Importing users table
-import { posts } from "./schema"; // Importing posts table
-import { eq } from "drizzle-orm"; // Import the eq function for equality checks
+import db from "./db";
+import { users, posts, sites } from "@/lib/schema";
+import { eq } from "drizzle-orm";
+import { SelectPost, SelectSite } from "@/lib/schema";
 
 const VERCEL_DEPLOYMENT = !!process.env.VERCEL_URL;
+
 export const authOptions: NextAuthOptions = {
   providers: [
     GitHubProvider({
@@ -25,7 +26,7 @@ export const authOptions: NextAuthOptions = {
   pages: {
     signIn: `/login`,
     verifyRequest: `/login`,
-    error: "/login", // Error code passed in query string as ?error=
+    error: "/login",
   },
   session: { strategy: "jwt" },
   cookies: {
@@ -78,7 +79,7 @@ export function withPostAuth(action: any) {
   return async (
     formData: FormData | null,
     postId: string,
-    key: string | null,
+    key: string | null
   ) => {
     const session = await getSession();
     if (!session?.user.id) {
@@ -87,11 +88,12 @@ export function withPostAuth(action: any) {
       };
     }
 
-    // Use the eq function to construct the where clause
-    const [post] = await db
-      .select()
-      .from(posts)
-      .where(eq(posts.id, postId));
+    const post = await db.query.posts.findFirst({
+      where: eq(posts.id, postId),
+      with: {
+        site: true,
+      },
+    });
 
     if (!post || post.userId !== session.user.id) {
       return {
@@ -100,5 +102,33 @@ export function withPostAuth(action: any) {
     }
 
     return action(formData, post, key);
+  };
+}
+
+export function withSiteAuth(action: any) {
+  return async (
+    formData: FormData | null,
+    site: SelectSite,
+    key: string | null
+  ) => {
+    const session = await getSession();
+    if (!session?.user.id) {
+      return {
+        error: "Not authenticated",
+      };
+    }
+
+    const [siteData] = await db
+      .select()
+      .from(sites)
+      .where(eq(sites.id, site.id));
+
+    if (!siteData || siteData.userId !== session.user.id) {
+      return {
+        error: "Site not found",
+      };
+    }
+
+    return action(formData, siteData, key);
   };
 }
