@@ -51,23 +51,16 @@ export default async function middleware(req: NextRequest) {
     );
   }
 
-  // special case for `vercel.pub` domain
-  if (hostname === "vercel.pub") {
-    return NextResponse.redirect(
-      "https://vercel.com/blog/platforms-starter-kit",
-    );
+  // Special case for localhost
+  if (hostname === "localhost:3000") {
+    return NextResponse.next();
   }
 
   // rewrite root application to `/home` folder
-  if (
-    hostname === "localhost:3000" ||
-    hostname === process.env.NEXT_PUBLIC_ROOT_DOMAIN
-  ) {
-    return NextResponse.rewrite(
-      new URL(`/home${path === "/" ? "" : path}`, req.url),
-    );
+  if (hostname === process.env.NEXT_PUBLIC_ROOT_DOMAIN) {
+    return NextResponse.rewrite(new URL(`/home${path}`, req.url));
   }
 
-  // rewrite everything else to `/[domain]/[slug] dynamic route
+  // rewrite everything else to `/` dynamic route
   return NextResponse.rewrite(new URL(`/${hostname}${path}`, req.url));
 }

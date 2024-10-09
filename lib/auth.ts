@@ -1,8 +1,6 @@
 import { getServerSession, type NextAuthOptions } from "next-auth";
 import GitHubProvider from "next-auth/providers/github";
-import db from "./db";
-import { DrizzleAdapter } from "@auth/drizzle-adapter";
-import { Adapter } from "next-auth/adapters";
+import db from "./db"; // Use the Knex instance
 import { accounts, sessions, users, verificationTokens } from "./schema";
 
 const VERCEL_DEPLOYMENT = !!process.env.VERCEL_URL;
@@ -27,12 +25,7 @@ export const authOptions: NextAuthOptions = {
     verifyRequest: `/login`,
     error: "/login", // Error code passed in query string as ?error=
   },
-  adapter: DrizzleAdapter(db, {
-    usersTable: users,
-    accountsTable: accounts,
-    sessionsTable: sessions,
-    verificationTokensTable: verificationTokens,
-  }) as Adapter,
+  // Remove DrizzleAdapter and replace with custom logic if needed
   session: { strategy: "jwt" },
   cookies: {
     sessionToken: {
@@ -41,7 +34,6 @@ export const authOptions: NextAuthOptions = {
         httpOnly: true,
         sameSite: "lax",
         path: "/",
-        // When working on localhost, the cookie domain must be omitted entirely (https://stackoverflow.com/a/1188145)
         domain: VERCEL_DEPLOYMENT
           ? `.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}`
           : undefined,
@@ -94,9 +86,7 @@ export function withSiteAuth(action: any) {
       };
     }
 
-    const site = await db.query.sites.findFirst({
-      where: (sites, { eq }) => eq(sites.id, siteId),
-    });
+    const site = await db('sites').where('id', siteId).first();
 
     if (!site || site.userId !== session.user.id) {
       return {
@@ -121,12 +111,7 @@ export function withPostAuth(action: any) {
       };
     }
 
-    const post = await db.query.posts.findFirst({
-      where: (posts, { eq }) => eq(posts.id, postId),
-      with: {
-        site: true,
-      },
-    });
+    const post = await db('posts').where('id', postId).first();
 
     if (!post || post.userId !== session.user.id) {
       return {

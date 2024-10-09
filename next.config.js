@@ -1,23 +1,20 @@
 /**
  * @type {import('next').NextConfig}
  */
-module.exports = {
-  experimental: {
-    serverActions: {
-      allowedOrigins: ["app.localhost:3000"],
-    },
-  },
+const nextConfig = {
+  reactStrictMode: true,
   images: {
-    remotePatterns: [
-      { hostname: "public.blob.vercel-storage.com" },
-      { hostname: "res.cloudinary.com" },
-      { hostname: "abs.twimg.com" },
-      { hostname: "pbs.twimg.com" },
-      { hostname: "avatar.vercel.sh" },
-      { hostname: "avatars.githubusercontent.com" },
-      { hostname: "www.google.com" },
-      { hostname: "flag.vercel.app" },
-      { hostname: "illustrations.popsy.co" },
+    domains: [
+      "public.blob.vercel-storage.com",
+      "res.cloudinary.com",
+      "abs.twimg.com",
+      "pbs.twimg.com",
+      "avatars.githubusercontent.com",
+      "www.google.com",
+      "flag.vercel.app",
+      "illustrations.popsy.co",
     ],
   },
 };
+
+module.exports = nextConfig;

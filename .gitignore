@@ -35,3 +35,18 @@ yarn-error.log*
 
 # typescript
 *.tsbuildinfo
+
+# custom additions
+printSchemas.js
+table_schemas.txt
+testApiEndpoints.js
+testApiEndpoints.mjs
+testConnection.js
+testConnection.ts
+.cursorignore
+.cursorrules
+
+# additional files
+lib/populateDatabase.js
+lib/populateDatabase.ts
+migrations/20231018_initial_setup.js

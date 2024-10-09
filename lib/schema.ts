@@ -17,7 +17,6 @@ export const users = pgTable("users", {
     .primaryKey()
     .$defaultFn(() => createId()),
   name: text("name"),
-  // if you are using Github OAuth, you can get rid of the username attribute (that is for Twitter OAuth)
   username: text("username"),
   gh_username: text("gh_username"),
   email: text("email").notNull().unique(),
@@ -59,16 +58,6 @@ export const verificationTokens = pgTable(
   },
 );
 
-export const examples = pgTable("examples", {
-  id: serial("id").primaryKey(),
-  name: text("name"),
-  description: text("description"),
-  domainCount: integer("domainCount"),
-  url: text("url"),
-  image: text("image"),
-  imageBlurhash: text("imageBlurhash"),
-});
-
 export const accounts = pgTable(
   "accounts",
   {
@@ -98,6 +87,16 @@ export const accounts = pgTable(
     };
   },
 );
+
+export const examples = pgTable("examples", {
+  id: serial("id").primaryKey(),
+  name: text("name"),
+  description: text("description"),
+  domainCount: integer("domainCount"),
+  url: text("url"),
+  image: text("image"),
+  imageBlurhash: text("imageBlurhash"),
+});
 
 export const sites = pgTable(
   "sites",
@@ -202,6 +201,20 @@ export const userRelations = relations(users, ({ many }) => ({
   sessions: many(sessions),
   sites: many(sites),
   posts: many(posts),
+}));
+
+export const classes = pgTable("classes", {
+  id: serial("id").primaryKey(),
+  title: text("title").notNull(),
+  description: text("description"),
+  schedule: timestamp("schedule", { mode: "date" }).notNull(),
+  instructorId: text("instructorId")
+    .notNull()
+    .references(() => users.id, { onDelete: "cascade", onUpdate: "cascade" }),
+});
+
+export const classesRelations = relations(classes, ({ one }) => ({
+  instructor: one(users, { references: [users.id], fields: [classes.instructorId] }),
 }));
 
 export type SelectSite = typeof sites.$inferSelect;
