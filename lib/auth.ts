@@ -1,7 +1,9 @@
 import { getServerSession, type NextAuthOptions } from "next-auth";
 import GitHubProvider from "next-auth/providers/github";
-import db from "./db"; // Use the Knex instance
+import db from "./db.mjs"; // Use the Drizzle ORM instance
 import { users } from "./schema"; // Importing users table
+import { posts } from "./schema"; // Importing posts table
+import { eq } from "drizzle-orm"; // Import the eq function for equality checks
 
 const VERCEL_DEPLOYMENT = !!process.env.VERCEL_URL;
 export const authOptions: NextAuthOptions = {
@@ -25,7 +27,6 @@ export const authOptions: NextAuthOptions = {
     verifyRequest: `/login`,
     error: "/login", // Error code passed in query string as ?error=
   },
-  // Remove DrizzleAdapter and replace with custom logic if needed
   session: { strategy: "jwt" },
   cookies: {
     sessionToken: {
@@ -86,7 +87,11 @@ export function withPostAuth(action: any) {
       };
     }
 
-    const post = await db('posts').where('id', postId).first();
+    // Use the eq function to construct the where clause
+    const [post] = await db
+      .select()
+      .from(posts)
+      .where(eq(posts.id, postId));
 
     if (!post || post.userId !== session.user.id) {
       return {
