@@ -73,7 +73,7 @@ export default function AdminDashboard() {
             <ul className="space-y-4">
               <li className="flex items-center text-gray-600">
                 <Calendar className="mr-2 h-5 w-5 text-[#6B4E71]" />
-                <span>New class "Advanced Yoga" created by Sarah Johnson</span>
+                <span>New class &quot;Advanced Yoga&quot; created by Sarah Johnson</span>
               </li>
               <li className="flex items-center text-gray-600">
                 <Users className="mr-2 h-5 w-5 text-[#6B4E71]" />
