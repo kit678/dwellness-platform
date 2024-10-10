@@ -15,23 +15,25 @@ async function clearAndDropAllTables() {
     const res = await client.query(`
       SELECT tablename
       FROM pg_tables
-      WHERE schemaname = 'public'
-      AND tablename NOT IN ('knex_migrations', 'knex_migrations_lock');
+      WHERE schemaname = 'public';
     `);
 
     // Clear and drop tables in reverse order of dependencies
     const tableNames = res.rows.map(row => row.tablename);
     for (const tableName of tableNames.reverse()) {
+      const qualifiedName = `"public"."${tableName}"`;
       try {
-        await client.query(`DROP TABLE IF EXISTS ${tableName} CASCADE`);
-        console.log(`Dropped table: ${tableName}`);
+        await client.query(`TRUNCATE TABLE ${qualifiedName} CASCADE`);
+        console.log(`Emptied table: ${qualifiedName}`);
+        await client.query(`DROP TABLE IF EXISTS ${qualifiedName} CASCADE`);
+        console.log(`Dropped table: ${qualifiedName}`);
       } catch (error) {
-        console.error(`Error dropping table ${tableName}:`, error);
+        console.error(`Error processing table ${qualifiedName}:`, error.message);
       }
     }
 
   } catch (error) {
-    console.error('Error processing tables:', error);
+    console.error('Error processing tables:', error.message);
   } finally {
     await client.end();
     console.log('Database connection closed.');

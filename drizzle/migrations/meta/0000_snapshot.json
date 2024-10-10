@@ -1,5 +1,5 @@
 {
-  "id": "6248144a-194c-4eaf-bcff-984b6268166a",
+  "id": "d14fdb04-4482-4bb0-babd-3cd07b02c422",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -291,7 +291,8 @@
           "name": "updatedAt",
           "type": "timestamp",
           "primaryKey": false,
-          "notNull": true
+          "notNull": true,
+          "default": "now()"
         },
         "isDummy": {
           "name": "isDummy",
@@ -394,7 +395,8 @@
           "name": "updated_at",
           "type": "timestamp",
           "primaryKey": false,
-          "notNull": true
+          "notNull": true,
+          "default": "now()"
         },
         "is_dummy": {
           "name": "is_dummy",
@@ -525,7 +527,8 @@
           "name": "updated_at",
           "type": "timestamp",
           "primaryKey": false,
-          "notNull": true
+          "notNull": true,
+          "default": "now()"
         },
         "is_dummy": {
           "name": "is_dummy",
@@ -620,7 +623,8 @@
           "name": "updatedAt",
           "type": "timestamp",
           "primaryKey": false,
-          "notNull": true
+          "notNull": true,
+          "default": "now()"
         },
         "published": {
           "name": "published",
@@ -690,7 +694,29 @@
           "notNull": true
         }
       },
-      "indexes": {},
+      "indexes": {
+        "posts_slug_siteId_index": {
+          "name": "posts_slug_siteId_index",
+          "columns": [
+            {
+              "expression": "slug",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "siteId",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
       "foreignKeys": {
         "posts_siteId_sites_id_fk": {
           "name": "posts_siteId_sites_id_fk",
@@ -789,7 +815,7 @@
           "type": "text",
           "primaryKey": true,
           "notNull": true,
-          "default": "'mpbzg41vgj7j1bykmava4o07'"
+          "default": "'zxlf3au7qaakdzebtskaen0v'"
         },
         "name": {
           "name": "name",
@@ -861,7 +887,8 @@
           "name": "updatedAt",
           "type": "timestamp",
           "primaryKey": false,
-          "notNull": true
+          "notNull": true,
+          "default": "now()"
         },
         "userId": {
           "name": "userId",
@@ -1012,7 +1039,7 @@
           "name": "email_verified",
           "type": "timestamp",
           "primaryKey": false,
-          "notNull": true
+          "notNull": false
         },
         "created_at": {
           "name": "created_at",
@@ -1025,7 +1052,8 @@
           "name": "updated_at",
           "type": "timestamp",
           "primaryKey": false,
-          "notNull": true
+          "notNull": true,
+          "default": "now()"
         },
         "is_dummy": {
           "name": "is_dummy",

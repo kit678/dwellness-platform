@@ -37,7 +37,7 @@ CREATE TABLE IF NOT EXISTS "blogs" (
 	"title" text NOT NULL,
 	"content" text NOT NULL,
 	"createdAt" timestamp DEFAULT now() NOT NULL,
-	"updatedAt" timestamp NOT NULL,
+	"updatedAt" timestamp DEFAULT now() NOT NULL,
 	"isDummy" boolean,
 	"categories" text,
 	"media" text,
@@ -53,7 +53,7 @@ CREATE TABLE IF NOT EXISTS "consultations" (
 	"schedule" timestamp NOT NULL,
 	"end_date" timestamp,
 	"created_at" timestamp DEFAULT now() NOT NULL,
-	"updated_at" timestamp NOT NULL,
+	"updated_at" timestamp DEFAULT now() NOT NULL,
 	"is_dummy" boolean,
 	"sessions" integer,
 	"package_type" text,
@@ -75,7 +75,7 @@ CREATE TABLE IF NOT EXISTS "instructors" (
 	"name" text NOT NULL,
 	"email" text NOT NULL,
 	"created_at" timestamp DEFAULT now() NOT NULL,
-	"updated_at" timestamp NOT NULL,
+	"updated_at" timestamp DEFAULT now() NOT NULL,
 	"is_dummy" boolean,
 	"profile_image" text,
 	"specialization" text,
@@ -92,7 +92,7 @@ CREATE TABLE IF NOT EXISTS "posts" (
 	"image" text,
 	"imageBlurhash" text,
 	"createdAt" timestamp DEFAULT now() NOT NULL,
-	"updatedAt" timestamp NOT NULL,
+	"updatedAt" timestamp DEFAULT now() NOT NULL,
 	"published" boolean DEFAULT false NOT NULL,
 	"siteId" text,
 	"userId" text,
@@ -113,7 +113,7 @@ CREATE TABLE IF NOT EXISTS "sessions" (
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "sites" (
-	"id" text PRIMARY KEY DEFAULT 'mpbzg41vgj7j1bykmava4o07' NOT NULL,
+	"id" text PRIMARY KEY DEFAULT 'zxlf3au7qaakdzebtskaen0v' NOT NULL,
 	"name" text,
 	"description" text,
 	"logo" text DEFAULT 'https://public.blob.vercel-storage.com/eEZHAoPTOBSYGBE3/JRajRyC-PhBHEinQkupt02jqfKacBVHLWJq7Iy.png',
@@ -124,7 +124,7 @@ CREATE TABLE IF NOT EXISTS "sites" (
 	"customDomain" text,
 	"message404" text DEFAULT 'Blimey! You''ve found a page that doesn''t exist.',
 	"createdAt" timestamp DEFAULT now() NOT NULL,
-	"updatedAt" timestamp NOT NULL,
+	"updatedAt" timestamp DEFAULT now() NOT NULL,
 	"userId" text,
 	CONSTRAINT "sites_subdomain_unique" UNIQUE("subdomain"),
 	CONSTRAINT "sites_customDomain_unique" UNIQUE("customDomain")
@@ -144,9 +144,9 @@ CREATE TABLE IF NOT EXISTS "users" (
 	"name" text,
 	"username" text,
 	"email" text NOT NULL,
-	"email_verified" timestamp NOT NULL,
+	"email_verified" timestamp,
 	"created_at" timestamp DEFAULT now() NOT NULL,
-	"updated_at" timestamp NOT NULL,
+	"updated_at" timestamp DEFAULT now() NOT NULL,
 	"is_dummy" boolean,
 	"provider" text,
 	"provider_id" text,
@@ -230,5 +230,6 @@ EXCEPTION
 END $$;
 --> statement-breakpoint
 CREATE INDEX IF NOT EXISTS "accounts_userId_index" ON "accounts" USING btree ("userId");--> statement-breakpoint
+CREATE UNIQUE INDEX IF NOT EXISTS "posts_slug_siteId_index" ON "posts" USING btree ("slug","siteId");--> statement-breakpoint
 CREATE INDEX IF NOT EXISTS "sessions_userId_index" ON "sessions" USING btree ("userId");--> statement-breakpoint
 CREATE INDEX IF NOT EXISTS "sites_userId_index" ON "sites" USING btree ("userId");
