@@ -49,4 +49,3 @@ testConnection.ts
 # additional files
 lib/populateDatabase.js
 lib/populateDatabase.ts
-migrations/20231018_initial_setup.js
