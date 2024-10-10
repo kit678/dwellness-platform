@@ -42,7 +42,7 @@ export default function RootLayout({
     <html lang="en">
       <body className="font-default">
         <Header />
-        <main className="mt-20">{children}</main>
+        {children}
         <Footer />
       </body>
     </html>

@@ -1,8 +1,8 @@
 'use client'
 
-import { useState } from 'react'
+import React, { useState } from 'react'
 import Link from 'next/link'
-import Image from 'next/image'
+import { motion } from 'framer-motion'
 
 export default function Hero() {
   const [isClicking, setIsClicking] = useState(false)
