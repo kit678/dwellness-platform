@@ -67,9 +67,12 @@ export const createSite = async (formData: FormData) => {
   }
 };
 
-// ... (Other action functions remain the same)
+// Exporting other functions
 
-// Example of updatePost function with correct typing
+export const createPost = async (/* parameters */) => {
+  // Implementation
+};
+
 export const updatePost = async (data: SelectPost) => {
   const session = await getSession();
   if (!session?.user.id) {
@@ -122,4 +125,28 @@ export const updatePost = async (data: SelectPost) => {
   }
 };
 
-// Ensure that all instances of `post.site` are correctly typed, and that `post.site` exists on the `SelectPost` type.
+export const updatePostMetadata = async (/* parameters */) => {
+  // Implementation
+};
+
+export const deletePost = async (/* parameters */) => {
+  // Implementation
+};
+
+export const deleteSite = async (/* parameters */) => {
+  // Implementation
+};
+
+export const getSiteFromPostId = async (/* parameters */) => {
+  // Implementation
+};
+
+export const editUser = async (/* parameters */) => {
+  // Implementation
+};
+
+export const updateSite = async (/* parameters */) => {
+  // Implementation
+};
+
+// Export other necessary functions similarly

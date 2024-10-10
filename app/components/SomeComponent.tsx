@@ -1,1 +1,0 @@
-// Wrap client components in Suspense for better loading states

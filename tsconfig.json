@@ -2,7 +2,7 @@
   "compilerOptions": {
     "target": "ESNext",
     "lib": ["dom", "dom.iterable", "esnext"],
-    "allowJs": true,
+    "allowJs": false,
     "skipLibCheck": true,
     "strict": true,
     "forceConsistentCasingInFileNames": true,
@@ -27,5 +27,15 @@
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
-  "exclude": ["node_modules"]
+  "exclude": [
+    "node_modules",
+
+    "lib/populateDatabase.js",
+    "lib/emptydbtable.js",
+    "testConnection.ts",
+    "testApiEndpoints.js",
+    "testApiEndpoints.mjs",
+    "testConnection.js",
+
+  ]
 }

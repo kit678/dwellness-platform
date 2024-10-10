@@ -1,31 +1,49 @@
-import "@/styles/globals.css";
-import { cal, inter } from "@/styles/fonts";
-import { Analytics } from "@vercel/analytics/react";
-import { Providers } from "./providers";
+import '../styles/globals.css';
+import { ReactNode } from "react";
+import Header from "@/components/Header";
+import Footer from "@/components/Footer";
 import { Metadata } from "next";
-import { cn } from "@/lib/utils";
 
-const title = "Dwellness - Your Wellness Journey Starts Here";
-const description = "Discover wellness classes, connect with instructors, and join a supportive community on Dwellness.";
+export async function generateMetadata({
+  params,
+}: {
+  params: { domain: string };
+}): Promise<Metadata | null> {
+  const domain = decodeURIComponent(params.domain);
 
-export const metadata: Metadata = {
-  title,
-  description,
-  // ... other metadata
-};
+  return {
+    title: "Dwellness",
+    description: "Empowering your journey to wellness, one step at a time.",
+    openGraph: {
+      title: "Dwellness",
+      description: "Empowering your journey to wellness, one step at a time.",
+      images: ["/default-image.png"],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: "Dwellness",
+      description: "Empowering your journey to wellness, one step at a time.",
+      images: ["/default-image.png"],
+      creator: "@dwellness",
+    },
+    icons: ["/logo.svg"],
+    metadataBase: new URL(`https://${domain}`),
+  };
+}
 
 export default function RootLayout({
+  params,
   children,
 }: {
-  children: React.ReactNode;
+  params: { domain: string };
+  children: ReactNode;
 }) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body className={cn(cal.variable, inter.variable)}>
-        <Providers>
-          {children}
-          <Analytics />
-        </Providers>
+    <html lang="en">
+      <body className="font-default">
+        <Header />
+        <main className="mt-20">{children}</main>
+        <Footer />
       </body>
     </html>
   );
