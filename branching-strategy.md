@@ -4,10 +4,23 @@
 
 This document outlines the steps to manage the Dwellness Platform project using Git and GitHub. It provides guidance on creating a trimmed-down version of the project while preserving the current state for future development.
 
-## Step 1: Create a New Branch for the Current State
+## Step 1: Prepare the Current State
+
+1. **Add Untracked Files:**
+   - Ensure all untracked files are added to the staging area:
+     ```bash
+     git add .
+     ```
+
+2. **Commit All Changes:**
+   - Commit all changes, including untracked files, with a descriptive message:
+     ```bash
+     git commit -m "Save current state with all changes"
+     ```
+
+## Step 2: Create a New Branch for the Current State
 
 1. **Create a New Branch:**
-   - Open your terminal and navigate to your project directory.
    - Create a new branch to save the current state of your project:
      ```bash
      git checkout -b full-featured-version
@@ -19,7 +32,7 @@ This document outlines the steps to manage the Dwellness Platform project using 
      git push origin full-featured-version
      ```
 
-## Step 2: Create a Branch for the Trimmed-Down Version
+## Step 3: Create a Branch for the Trimmed-Down Version
 
 1. **Create a New Branch for the Smaller Project:**
    - Switch back to the main branch (or the branch you want to base the smaller project on):
@@ -37,7 +50,7 @@ This document outlines the steps to manage the Dwellness Platform project using 
 3. **Test Locally:**
    - Ensure that the trimmed-down version builds and runs correctly on your local machine.
 
-## Step 3: Push the Trimmed-Down Version to GitHub
+## Step 4: Push the Trimmed-Down Version to GitHub
 
 1. **Commit Your Changes:**
    - Add and commit your changes to the new branch:
@@ -52,7 +65,7 @@ This document outlines the steps to manage the Dwellness Platform project using 
      git push origin minimal-version
      ```
 
-## Step 4: Manage Deployment on Vercel
+## Step 5: Manage Deployment on Vercel
 
 1. **Connect the Minimal Version Branch to Vercel:**
    - Log in to your Vercel account and navigate to your project settings.
@@ -61,7 +74,7 @@ This document outlines the steps to manage the Dwellness Platform project using 
 2. **Deploy the Trimmed-Down Version:**
    - Vercel will automatically deploy the branch you set as the production branch. Ensure that the deployment is successful and the application works as expected.
 
-## Step 5: Switching Between Versions
+## Step 6: Switching Between Versions
 
 - **Switch to Full-Featured Version:**
   - If you need to work on the full-featured version again, switch to the `full-featured-version` branch:
