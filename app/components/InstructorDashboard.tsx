@@ -128,7 +128,6 @@ export default function InstructorDashboard() {
               </Link>
             </div>
           </div>
-
           {/* Quick Actions */}
           <div className="md:col-span-2 lg:col-span-3">
             <div className="bg-white rounded-lg shadow-md p-6">

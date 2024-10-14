@@ -1,7 +1,9 @@
+/* styles/globals.css */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+/* Your custom styles below */
 @media (prefers-color-scheme: dark) {
   body {
     background-color: #000000;
@@ -11,16 +13,73 @@
 @layer utilities {
   .overflow-hidden {
     -webkit-mask-image: -webkit-radial-gradient(white, black);
+    mask-image: radial-gradient(white, black); /* Added for standard compatibility */
   }
 }
 
-.ProseMirror .is-editor-empty:first-child::before {
-  content: attr(data-placeholder);
-  float: left;
-  color: #adb5bd;
-  pointer-events: none;
-  height: 0;
+.scrollable-content {
+  overflow-y: auto;
+  height: calc(100vh - 200px); /* Adjusted based on the height of the fixed header */
 }
+
+.fixed-header {
+  position: sticky;
+  top: 0;
+  background-color: black;
+  z-index: 10;
+  width: 100%;
+  padding-bottom: 1rem;
+}
+
+/* Adjust card styles */
+.bg-white.bg-opacity-80 {
+  background-color: rgba(255, 255, 255, 0.85);
+}
+
+.backdrop-blur-sm {
+  backdrop-filter: blur(4px);
+}
+
+/* Hover effects for images */
+.ProseMirror img,
+.bg-white img {
+  transition: transform 0.2s ease-in-out;
+}
+
+.ProseMirror img:hover,
+.bg-white img:hover {
+  transform: scale(1.05);
+}
+
+/* Style adjustments for inputs */
+input[type="text"] {
+  background-color: #1f2937;
+  color: #9ca3af;
+  border: none;
+}
+
+/* Customize scrollbar */
+.scrollable-content::-webkit-scrollbar {
+  width: 8px;
+}
+
+.scrollable-content::-webkit-scrollbar-thumb {
+  background: #4B5563;
+  border-radius: 4px;
+}
+
+.scrollable-content::-webkit-scrollbar-thumb:hover {
+  background: #6B7280;
+}
+
+/* Adjustments for mobile responsiveness */
+@media screen and (max-width: 640px) {
+  .grid-cols-2 {
+    grid-template-columns: repeat(1, minmax(0, 1fr));
+  }
+}
+
+.ProseMirror .is-editor-empty:first-child::before,
 .ProseMirror .is-empty::before {
   content: attr(data-placeholder);
   float: left;
@@ -30,23 +89,23 @@
 }
 
 /* Custom image styles */
-
 .ProseMirror img {
   transition: filter 0.1s ease-in-out;
-
-  &:hover {
-    cursor: pointer;
-    filter: brightness(90%);
-  }
-
-  &.ProseMirror-selectednode {
-    outline: 3px solid #5abbf7;
-    filter: brightness(90%);
-  }
 }
 
-/* Custom TODO list checkboxes – shoutout to this awesome tutorial: https://moderncss.dev/pure-css-custom-checkbox-style/ */
+/* Hover state for images */
+.ProseMirror img:hover {
+  cursor: pointer;
+  filter: brightness(90%);
+}
 
+/* Selected node state */
+.ProseMirror img.ProseMirror-selectednode {
+  outline: 3px solid #5abbf7;
+  filter: brightness(90%);
+}
+
+/* Custom TODO list checkboxes */
 ul[data-type="taskList"] li > label {
   margin-right: 0.2rem;
   user-select: none;
@@ -72,29 +131,33 @@ ul[data-type="taskList"] li > label input[type="checkbox"] {
   margin-right: 0.3rem;
   display: grid;
   place-content: center;
+}
 
-  &:hover {
-    background-color: #f8f9fa;
-  }
+/* Hover state */
+ul[data-type="taskList"] li > label input[type="checkbox"]:hover {
+  background-color: #f8f9fa;
+}
 
-  &:active {
-    background-color: #e9ecef;
-  }
+/* Active state */
+ul[data-type="taskList"] li > label input[type="checkbox"]:active {
+  background-color: #e9ecef;
+}
 
-  &::before {
-    content: "";
-    width: 0.65em;
-    height: 0.65em;
-    transform: scale(0);
-    transition: 120ms transform ease-in-out;
-    box-shadow: inset 1em 1em;
-    transform-origin: center;
-    clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
-  }
+/* Before pseudo-element */
+ul[data-type="taskList"] li > label input[type="checkbox"]::before {
+  content: "";
+  width: 0.65em;
+  height: 0.65em;
+  transform: scale(0);
+  transition: 120ms transform ease-in-out;
+  box-shadow: inset 1em 1em;
+  transform-origin: center;
+  clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
+}
 
-  &:checked::before {
-    transform: scale(1);
-  }
+/* Checked state */
+ul[data-type="taskList"] li > label input[type="checkbox"]:checked::before {
+  transform: scale(1);
 }
 
 ul[data-type="taskList"] li[data-checked="true"] > div > p {

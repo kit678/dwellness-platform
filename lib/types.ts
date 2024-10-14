@@ -1,4 +1,4 @@
-// Remove any conflicting definitions for SelectPost or SelectSite
+// Define domain verification statuses without conflicting definitions
 
 export type DomainVerificationStatusProps =
   | "Valid Configuration"
@@ -7,29 +7,26 @@ export type DomainVerificationStatusProps =
   | "Domain Not Found"
   | "Unknown Error";
 
+// Interfaces based on Vercel's REST API documentation
+
 // From https://vercel.com/docs/rest-api/endpoints#get-a-project-domain
 export interface DomainResponse {
   name: string;
   apexName: string;
   projectId: string;
   redirect?: string | null;
-  redirectStatusCode?: (307 | 301 | 302 | 308) | null;
+  redirectStatusCode?: 301 | 302 | 307 | 308 | null;
   gitBranch?: string | null;
   updatedAt?: number;
   createdAt?: number;
   verified: boolean;
-  verification: {
-    type: string;
-    domain: string;
-    value: string;
-    reason: string;
-  }[];
+  verification: VerificationDetail[];
 }
 
 // From https://vercel.com/docs/rest-api/endpoints#get-a-domain-s-configuration
 export interface DomainConfigResponse {
-  configuredBy?: ("CNAME" | "A" | "http") | null;
-  acceptedChallenges?: ("dns-01" | "http-01")[];
+  configuredBy?: "A" | "CNAME" | "HTTP" | null;
+  acceptedChallenges?: Array<"dns-01" | "http-01">;
   misconfigured: boolean;
 }
 
@@ -39,33 +36,55 @@ export interface DomainVerificationResponse {
   apexName: string;
   projectId: string;
   redirect?: string | null;
-  redirectStatusCode?: (307 | 301 | 302 | 308) | null;
+  redirectStatusCode?: 301 | 302 | 307 | 308 | null;
   gitBranch?: string | null;
   updatedAt?: number;
   createdAt?: number;
   verified: boolean;
-  verification?: {
-    type: string;
-    domain: string;
-    value: string;
-    reason: string;
-  }[];
+  verification?: VerificationDetail[];
 }
 
-// Other custom types can remain here
+export interface VerificationDetail {
+  type: string;
+  domain: string;
+  value: string;
+  reason: string;
+}
 
-// Example:
+// Custom User and Session Interfaces
+
 export interface CustomUser {
   id: string;
   name: string;
   email: string;
   image: string;
-  // ... other user properties
+  // Add other user properties as needed
 }
 
 export interface CustomSession {
   user: CustomUser;
-  // ... other session properties
+  // Add other session properties as needed
 }
 
-// Add any other types you need, ensuring they don't conflict with types from schema.ts
+// Additional Custom Types
+
+// Example: Post Type
+export interface Post {
+  id: string;
+  title: string;
+  content: string;
+  authorId: string;
+  createdAt: number;
+  updatedAt: number;
+}
+
+// Example: Site Type
+export interface Site {
+  id: string;
+  domain: string;
+  ownerId: string;
+  createdAt: number;
+  updatedAt: number;
+}
+
+// Ensure no conflicting types exist with other schema definitions

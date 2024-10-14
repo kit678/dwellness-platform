@@ -49,3 +49,5 @@ testConnection.ts
 # additional files
 lib/populateDatabase.js
 lib/populateDatabase.ts
+
+*storybook.log

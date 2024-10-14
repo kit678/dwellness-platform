@@ -1,0 +1,145 @@
+                                                Materialized view "public.digest_discover_view"
+          Column          |            Type             | Collation | Nullable | Default | Storage  | Compression | Stats target | Description 
+--------------------------+-----------------------------+-----------+----------+---------+----------+-------------+--------------+-------------
+ type                     | text                        |           |          |         | extended |             |              | 
+ id                       | text                        |           |          |         | extended |             |              | 
+ name                     | text                        |           |          |         | extended |             |              | 
+ username                 | text                        |           |          |         | extended |             |              | 
+ image                    | text                        |           |          |         | extended |             |              | 
+ bio                      | text                        |           |          |         | extended |             |              | 
+ specialization           | text                        |           |          |         | extended |             |              | 
+ profile_image            | text                        |           |          |         | extended |             |              | 
+ caption                  | text                        |           |          |         | extended |             |              | 
+ media_url                | text                        |           |          |         | extended |             |              | 
+ timestamp                | timestamp without time zone |           |          |         | plain    |             |              | 
+ title                    | text                        |           |          |         | extended |             |              | 
+ description              | text                        |           |          |         | extended |             |              | 
+ schedule                 | timestamp without time zone |           |          |         | plain    |             |              | 
+ instructor_name          | text                        |           |          |         | extended |             |              | 
+ instructor_profile_image | text                        |           |          |         | extended |             |              | 
+ excerpt                  | text                        |           |          |         | extended |             |              | 
+ media                    | text                        |           |          |         | extended |             |              | 
+ author_name              | text                        |           |          |         | extended |             |              | 
+ author_profile_image     | text                        |           |          |         | extended |             |              | 
+ created_at               | timestamp without time zone |           |          |         | plain    |             |              | 
+Indexes:
+    "idx_digest_discover_search" gin (to_tsvector('english'::regconfig, (((((((((COALESCE(name, ''::text) || ' '::text) || COALESCE(username, ''::text)) || ' '::text) || COALESCE(bio, ''::text)) || ' '::text) || COALESCE(title, ''::text)) || ' '::text) || COALESCE(description, ''::text)) || ' '::text) || COALESCE(excerpt, ''::text)))
+View definition:
+ SELECT 'user'::text AS type,
+    users.id,
+    users.name,
+    users.username,
+    users.image,
+    NULL::text AS bio,
+    NULL::text AS specialization,
+    NULL::text AS profile_image,
+    NULL::text AS caption,
+    NULL::text AS media_url,
+    NULL::timestamp without time zone AS "timestamp",
+    NULL::text AS title,
+    NULL::text AS description,
+    NULL::timestamp without time zone AS schedule,
+    NULL::text AS instructor_name,
+    NULL::text AS instructor_profile_image,
+    NULL::text AS excerpt,
+    NULL::text AS media,
+    NULL::text AS author_name,
+    NULL::text AS author_profile_image,
+    NULL::timestamp without time zone AS created_at
+   FROM users
+UNION ALL
+ SELECT 'instructor'::text AS type,
+    instructors.id,
+    instructors.name,
+    NULL::text AS username,
+    NULL::text AS image,
+    instructors.bio,
+    instructors.specialization,
+    instructors.profile_image,
+    NULL::text AS caption,
+    NULL::text AS media_url,
+    NULL::timestamp without time zone AS "timestamp",
+    NULL::text AS title,
+    NULL::text AS description,
+    NULL::timestamp without time zone AS schedule,
+    NULL::text AS instructor_name,
+    NULL::text AS instructor_profile_image,
+    NULL::text AS excerpt,
+    NULL::text AS media,
+    NULL::text AS author_name,
+    NULL::text AS author_profile_image,
+    NULL::timestamp without time zone AS created_at
+   FROM instructors
+UNION ALL
+ SELECT 'instagram'::text AS type,
+    instagram_posts.id,
+    NULL::text AS name,
+    instagram_posts.username,
+    NULL::text AS image,
+    NULL::text AS bio,
+    NULL::text AS specialization,
+    NULL::text AS profile_image,
+    instagram_posts.caption,
+    instagram_posts.media_url,
+    instagram_posts."timestamp",
+    NULL::text AS title,
+    NULL::text AS description,
+    NULL::timestamp without time zone AS schedule,
+    NULL::text AS instructor_name,
+    NULL::text AS instructor_profile_image,
+    NULL::text AS excerpt,
+    NULL::text AS media,
+    NULL::text AS author_name,
+    NULL::text AS author_profile_image,
+    NULL::timestamp without time zone AS created_at
+   FROM instagram_posts
+UNION ALL
+ SELECT 'consultation'::text AS type,
+    c.id,
+    NULL::text AS name,
+    NULL::text AS username,
+    NULL::text AS image,
+    NULL::text AS bio,
+    NULL::text AS specialization,
+    NULL::text AS profile_image,
+    NULL::text AS caption,
+    NULL::text AS media_url,
+    NULL::timestamp without time zone AS "timestamp",
+    c.title,
+    c.description,
+    c.schedule,
+    i.name AS instructor_name,
+    i.profile_image AS instructor_profile_image,
+    NULL::text AS excerpt,
+    NULL::text AS media,
+    NULL::text AS author_name,
+    NULL::text AS author_profile_image,
+    NULL::timestamp without time zone AS created_at
+   FROM consultations c
+     LEFT JOIN instructors i ON c.instructor_id = i.id
+UNION ALL
+ SELECT 'blog'::text AS type,
+    b.id,
+    NULL::text AS name,
+    NULL::text AS username,
+    NULL::text AS image,
+    NULL::text AS bio,
+    NULL::text AS specialization,
+    NULL::text AS profile_image,
+    NULL::text AS caption,
+    NULL::text AS media_url,
+    NULL::timestamp without time zone AS "timestamp",
+    b.title,
+    NULL::text AS description,
+    NULL::timestamp without time zone AS schedule,
+    NULL::text AS instructor_name,
+    NULL::text AS instructor_profile_image,
+    b.excerpt,
+    NULL::text AS media,
+    u.name AS author_name,
+    u.image AS author_profile_image,
+    b."createdAt" AS created_at
+   FROM blogs b
+     LEFT JOIN users u ON b."authorId" = u.id;
+Access method: heap
+

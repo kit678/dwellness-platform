@@ -68,6 +68,9 @@ export const consultations = pgTable("consultations", {
     onDelete: "cascade",
     onUpdate: "cascade",
   }),
+  // Added fields
+  instructor_name: text("instructor_name"),
+  instructor_profile_image: text("instructor_profile_image"),
 });
 
 // Define the attendance table
@@ -169,6 +172,8 @@ export const blogs = pgTable("blogs", {
   id: text("id").primaryKey(),
   title: text("title").notNull(),
   content: text("content").notNull(),
+  // Added excerpt field
+  excerpt: text("excerpt"),
   createdAt: timestamp("createdAt", { mode: "date" }).defaultNow().notNull(),
   updatedAt: timestamp("updatedAt", { mode: "date" })
     .defaultNow()
@@ -183,6 +188,9 @@ export const blogs = pgTable("blogs", {
     onDelete: "cascade",
     onUpdate: "cascade",
   }),
+  // Added fields
+  author_name: text("author_name"),
+  author_profile_image: text("author_profile_image"),
 });
 
 // Define the analytics table
@@ -290,6 +298,25 @@ export const userMetrics = pgTable("user_metrics", {
   commentsMade: integer("commentsMade"),
   lastActive: timestamp("lastActive", { mode: "date" }).notNull(),
 });
+
+// Define the instagram_posts table
+export const instagramPosts = pgTable("instagram_posts", {
+  id: text("id").primaryKey(),
+  caption: text("caption").notNull(),
+  media_url: text("media_url").notNull(),
+  media_type: text("media_type").notNull(),
+  timestamp: timestamp("timestamp", { mode: "date" }).notNull(),
+  permalink: text("permalink"),
+  username: text("username").notNull(),
+  like_count: integer("like_count").notNull(),
+  comments_count: integer("comments_count").notNull(),
+  // You can add more fields if needed
+});
+
+// If you have relations, you can define them as well
+export const instagramPostsRelations = relations(instagramPosts, ({ one }) => ({
+  // Define any relations if necessary
+}));
 
 // Define relationships
 export const userRelations = relations(users, ({ many }) => ({
